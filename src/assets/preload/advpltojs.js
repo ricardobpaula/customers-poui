@@ -6,6 +6,4 @@ function advpltojs(codeType, content){
   }
   // Efetua o envio do evento para observable do buildObservable
   this.eventTarget.send(codeType, content);
-  console.log(codeType);
-  console.log(content);
 }

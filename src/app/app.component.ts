@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 
-import { ProAppConfigService, ProJsToAdvpl, ProJsToAdvplService } from '@totvs/protheus-lib-core';
-
 import { PoTableColumn } from '@po-ui/ng-components';
-import { Observable } from 'rxjs';
 import { AppService } from './app.service';
+import { Customer } from './model/customer';
+
+interface CustomerResponse {
+  data: Customer[]
+}
 
 @Component({
   selector: 'app-root',
@@ -15,18 +17,21 @@ export class AppComponent {
 
   constructor(private appService:AppService) {}
 
+  public items:Customer[] = []
+
   public columns:PoTableColumn[] = [
     { label: 'Codigo',property: 'code', width: '30%'},
     { label: 'Nome',property: 'name', width: '70%'}
   ];
 
-  public items:any[] = [
-    { code: '0001', name: 'Computador' },
-    { code: '0002', name: 'Teclado' }
-  ];
-
-  public onClick() {
-    this.appService.jsAdvplObs()
+  ngOnInit() {
+    this.appService.jsAdvplObs().subscribe({
+      next: payLoad => {
+        const data = JSON.parse(payLoad) as CustomerResponse;
+        console.log(data);
+        this.items = data.data;
+      }
+    });
   }
 
 }
